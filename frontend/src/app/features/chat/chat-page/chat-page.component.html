@@ -1,0 +1,28 @@
+<div class="chat-container">
+  <h1>Chatbot Immobilier</h1>
+
+  <div class="messages">
+    <div
+      *ngFor="let m of messages"
+      class="message-row"
+      [ngClass]="m.role"
+    >
+      <div class="bubble">
+        <b *ngIf="m.role === 'user'">Vous :</b>
+        <b *ngIf="m.role === 'assistant'">Bot :</b>
+        {{ m.content }}
+      </div>
+    </div>
+  </div>
+
+  <p *ngIf="loading">Le bot réfléchit...</p>
+
+  <div class="input-row">
+    <input
+      [(ngModel)]="input"
+      placeholder="Pose une question immobilière..."
+      (keyup.enter)="send()"
+    />
+    <button (click)="send()">Envoyer</button>
+  </div>
+</div>
