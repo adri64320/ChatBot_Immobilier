@@ -15,7 +15,7 @@ async def chat(req: ChatRequest) -> ChatResponse:
         Message(role="assistant", content=reply_text),
     ]
 
-    return ChatResponse(
+    return ChatResponse( 
         conversation_id=req.conversation_id,
         messages=all_messages,
     )
