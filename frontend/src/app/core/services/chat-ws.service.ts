@@ -37,7 +37,7 @@ export class ChatWsService {
     this.socket = new WebSocket(url);
 
     this.socket.onopen = () => {
-      console.log('[WS] connecté');
+      console.log('[WS] connecté'); 
     };
 
     this.socket.onmessage = (event) => {
