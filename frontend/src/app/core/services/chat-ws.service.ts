@@ -32,7 +32,7 @@ export class ChatWsService {
     ) {
       return;
     }
-
+ 
     const url = `ws://localhost:8000/ws/chat/${this.conversationId}`;
     this.socket = new WebSocket(url);
 
