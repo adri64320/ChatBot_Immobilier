@@ -1,0 +1,38 @@
+name: Deploy frontend to Koyeb
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'frontend/**'
+      - '.github/workflows/deploy-frontend-koyeb.yml'
+
+jobs:
+  deploy-frontend:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install and configure Koyeb CLI
+        uses: koyeb-community/koyeb-actions@v2
+        with:
+          api_token: "${{ secrets.KOYEB_API_TOKEN }}"
+
+      - name: Build and deploy frontend to Koyeb
+        uses: koyeb/action-git-deploy@v1
+        with:
+          app-name: chatbot-immo
+          service-name: frontend
+
+          git-builder: docker
+          git-workdir: frontend
+          git-docker-dockerfile: Dockerfile
+
+          service-instance-type: free
+
+          # Ton Angular écoute sur 4200 dans le container
+          service-ports: "4200:http"
+          service-routes: "/:4200"

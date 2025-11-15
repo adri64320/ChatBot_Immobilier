@@ -1,0 +1,46 @@
+name: Deploy backend to Koyeb
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'backend/**'
+      - '.github/workflows/deploy-backend-koyeb.yml'
+
+jobs:
+  deploy-backend:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install and configure Koyeb CLI
+        uses: koyeb-community/koyeb-actions@v2
+        with:
+          api_token: "${{ secrets.KOYEB_API_TOKEN }}"
+
+      - name: Build and deploy backend to Koyeb
+        uses: koyeb/action-git-deploy@v1
+        with:
+          # Nom de l’app et du service côté Koyeb (tu peux changer)
+          app-name: chatbot-immo
+          service-name: backend
+
+          # On dit à Koyeb : build depuis ce repo avec Docker
+          git-builder: docker
+
+          # Monorepo : on lui dit de travailler dans le dossier backend/
+          git-workdir: backend
+          git-docker-dockerfile: Dockerfile
+
+          # Free tier
+          service-instance-type: free
+
+          # Port exposé par ton container (FastAPI sur 8000)
+          service-ports: "8000:http"
+          service-routes: "/:8000"
+
+          # Variables d'env simples
+          service-env: "PYTHONUNBUFFERED=1"
